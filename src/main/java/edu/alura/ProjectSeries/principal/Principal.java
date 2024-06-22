@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.DoubleSummaryStatistics;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -51,7 +52,7 @@ public class Principal {
                 // guardo y muestro los datos
                 var datosSerie = convierteDatos.obterDados(json, DatosSeries.class);
                 System.out.println(datosSerie);
-                // muestro todos los datos de las temporadas
+                //guardo los datos de las temporadas
                 List<DatosTemporadas> temporadas = new ArrayList<>();
                 for (int index = 1; index <= datosSerie.totalTemporadas(); index++) {
                         json = comsumoAPI.obtenerDatos(String.format("%s%s&season=%d&%s",
@@ -59,34 +60,37 @@ public class Principal {
                         var temporada = convierteDatos.obterDados(json, DatosTemporadas.class);
                         temporadas.add(temporada);
                 }
+                // muestro todos los datos de las temporadas
                 // temporadas.forEach(t -> {
                 // t.episodes().forEach(e -> {
                 // System.out.println(e.titulo());
                 // });
                 // System.out.println("================================================================");
                 // });
-
+                //lista de datos de episodes (DatosEpisode)
                 // List<DatosEpisode> datosEpisodes = temporadas.stream()
                 // .flatMap(t -> t.episodes().stream())
                 // .collect(Collectors.toList());
-
+                //muestro el top 5
                 // System.out.println("Top 5 episodeos");
                 // datosEpisodes.stream()
                 // .filter(e->!e.evaluacion().equals("N/A"))
                 // .sorted(Comparator.comparing(DatosEpisode::evaluacion).reversed())
                 // .limit(5)
                 // .forEach(e->System.out.println(e));
-
+                //cambio para que ya sea una lista de episode y no mas DAtosEpisode
                 List<Episode> episodes = temporadas.stream()
                                 .flatMap(t -> t.episodes().stream()
                                                 .map(e -> new Episode(t.num(), e)))
                                 .collect(Collectors.toList());
-
+                //top 5
                 // System.out.println("Top 5 episodes");
                 // episodes.stream().sorted(Comparator.comparing(Episode::getEvaluacion).reversed())
                 // .limit(5)
                 // .forEach(System.out::println);
 
+
+                //filtro por año
                 // episodes.forEach(e -> System.out.println(e.toString()));
                 // DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
                 // System.out.println("Ingrese el año del epsodio");
@@ -100,6 +104,7 @@ public class Principal {
                 // " Episodio: " + e.getTitulo() +
                 // " Fecha: " + e.getFechaLanz().format(formato)));
 
+                //busqueda por nombre
                 // System.out.println("Ingrese el nombre o um pedaço del nombre del episodio que
                 // buscas");
                 // String titulo = scn.nextLine();
@@ -110,13 +115,21 @@ public class Principal {
                 // System.out.println(epBuscado.get());
                 // else
                 // System.out.println("Ep no encontrado");
+                //datos estadisticos para cada temporada
+                // Map<Integer, Double> evalPorTemp = episodes.parallelStream()
+                // .filter(e->e.getEvaluacion()>0)
+                // .collect(Collectors.groupingBy(Episode::getTemporada,
+                // Collectors.averagingDouble(Episode::getEvaluacion)));
 
-                Map<Integer, Double> evalPorTemp = episodes.parallelStream()
+                // System.out.println(evalPorTemp);
+
+                //datos estadisticos de la seria utilizando el doubleSummaryStatistic
+                DoubleSummaryStatistics est = episodes.parallelStream()
                 .filter(e->e.getEvaluacion()>0)
-                .collect(Collectors.groupingBy(Episode::getTemporada,
-                Collectors.averagingDouble(Episode::getEvaluacion)));
-
-                System.out.println(evalPorTemp);
+                //summarizingDouble 
+                .collect(Collectors.summarizingDouble(Episode::getEvaluacion));
+                
+                System.out.println(est);
 
                 System.out.println("Deseas buscar otra serie?");
                 if (scn.nextLine().toLowerCase().toCharArray()[0] == 's') {
