@@ -9,7 +9,7 @@ by year, name, top 5 and see the averagin clasification of a season</p>
 <lo>
   <li>They teach how to prepare the environment of Spring</li>
   <li>They teach how to connect to a API, using the class comsumoAPI</li>
-  <li>How to transform from a json String to a record, and  then to a java Class</li>
+  <li>How to transform from a json String to a record, and  then to a java Class. Thanks to jackson (extension that I use in this project) (pom.xml)</li>
   <li>Finaly we start to use ,stream(), wich can make a filter in our List</li>
 </lo>
 <h3>My conclusion</h3>
