@@ -15,4 +15,4 @@ by year, name, top 5 and see the averagin clasification of a season</p>
 <h3>My conclusion</h3>
 <p>If you se <a href="https://github.com/JuManoel/project-minecomercio.git">my final project in Prog2</a>
 you will see the that final project is not well optimized, and it could be simple.</p>
-<p>So I like it, and I will try always to use it in my future project</p>
+<p>So I like to use Spring Boot, I have learned a lot, and I will try always to use it in my future project</p>
