@@ -6,12 +6,12 @@ also its works with Maven</p>
 <p>During the class, our activity was to manage series like Netflix. So the user can filter episodes
 by year, name, top 5 and see the averagin clasification of a season</p>
 <h2>How we did it</h2>
-<lo>
+<ol>
   <li>They teach how to prepare the environment of Spring</li>
   <li>They teach how to connect to a API, using the class comsumoAPI</li>
   <li>How to transform from a json String to a record, and  then to a java Class. Thanks to jackson (extension that I use in this project) (pom.xml)</li>
   <li>Finaly we start to use ,stream(), wich can make a filter in our List</li>
-</lo>
+</ol>
 <h3>My conclusion</h3>
 <p>If you se <a href="https://github.com/JuManoel/project-minecomercio.git">my final project in Prog2</a>
 you will see the that final project is not well optimized, and it could be simple.</p>
