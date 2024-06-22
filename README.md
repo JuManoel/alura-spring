@@ -1,7 +1,7 @@
 <h1>My first project using Spring Boot</h1>
-<p>Alura latam, in its course, teach about how to inicialize, and how to work using spring boot
-Spring Boot, is like a project formatter, its prepare basic implementations for any project
-also its works with Maven</p>
+<p>In its course of alura latam (Java y Spring Boot G6 - ONE),they teached about how to inicialize, and how to work using spring boot.
+Spring Boot, is like a project formatter, its prepare basic implementations for any project.
+Also its works with Maven</p>
 <h2>About the project</h2>
 <p>During the class, our activity was to manage series like Netflix. So the user can filter episodes
 by year, name, top 5 and see the averagin clasification of a season</p>
