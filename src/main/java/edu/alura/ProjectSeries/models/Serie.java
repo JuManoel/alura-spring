@@ -1,9 +1,6 @@
 package edu.alura.ProjectSeries.models;
 
-import java.util.Optional;
 import java.util.OptionalDouble;
-
-import com.fasterxml.jackson.annotation.JsonAlias;
 
 public class Serie {
     private String titulo;

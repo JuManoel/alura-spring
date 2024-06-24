@@ -1,25 +1,15 @@
 package edu.alura.ProjectSeries.principal;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.DoubleSummaryStatistics;
-import java.util.HashMap;
+
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+
 import java.util.Scanner;
-import java.util.stream.Collector;
+
 import java.util.stream.Collectors;
 
-import javax.swing.text.DateFormatter;
-
-import edu.alura.ProjectSeries.models.DatosEpisode;
-import edu.alura.ProjectSeries.models.DatosSeries;
-import edu.alura.ProjectSeries.models.DatosTemporadas;
-import edu.alura.ProjectSeries.models.Episode;
-import edu.alura.ProjectSeries.models.Serie;
+import edu.alura.ProjectSeries.models.*;
 import edu.alura.ProjectSeries.service.ConsumoAPI;
 import edu.alura.ProjectSeries.service.ConvierteDatos;
 
@@ -40,12 +30,11 @@ public class Principal {
         private final String API = "&apikey=53a8e07f";
         private final String URL = "https://www.omdbapi.com/?t=";
 
-
         private List<DatosSeries> datosSeries = new ArrayList<>();
 
         public void menu() {
                 int opcion;
-                do{
+                do {
                         var menu = """
                                         1 - Buscar series
                                         2 - Buscar episodios
@@ -73,15 +62,15 @@ public class Principal {
                                 default:
                                         System.out.println("Opción inválida");
                         }
-                }while (opcion != 0);
+                } while (opcion != 0);
 
         }
 
         private DatosSeries getDatosSerie() {
                 System.out.println("Escribe el nombre de la serie que deseas buscar");
                 var nombreSerie = scn.nextLine();
-                var json = consumoApi.obtenerDatos(URL + nombreSerie.replace(" ", "+") + API);
-                DatosSeries datos = convierteDatos.obterDados(json, DatosSeries.class);
+                this.json = consumoApi.obtenerDatos(URL + nombreSerie.replace(" ", "+") + API);
+                DatosSeries datos = convierteDatos.obterDados(this.json, DatosSeries.class);
                 return datos;
         }
 
@@ -90,9 +79,9 @@ public class Principal {
                 List<DatosTemporadas> temporadas = new ArrayList<>();
 
                 for (int i = 1; i <= datosSerie.totalTemporadas(); i++) {
-                        var json = consumoApi.obtenerDatos(
+                        this.json = consumoApi.obtenerDatos(
                                         URL + datosSerie.titulo().replace(" ", "+") + "&season=" + i + API);
-                        DatosTemporadas datosTemporada = convierteDatos.obterDados(json, DatosTemporadas.class);
+                        DatosTemporadas datosTemporada = convierteDatos.obterDados(this.json, DatosTemporadas.class);
                         temporadas.add(datosTemporada);
                 }
                 temporadas.forEach(System.out::println);
@@ -101,16 +90,16 @@ public class Principal {
         private void buscarSerieWeb() {
                 DatosSeries datos = getDatosSerie();
                 datosSeries.add(datos);
-                System.out.println(datos.titulo()+" adicionada con sucesso!");
+                System.out.println(datos.titulo() + " adicionada con sucesso!");
         }
 
-        private void mostrarSeries(){
+        private void mostrarSeries() {
                 List<Serie> series = new ArrayList<>();
                 series = datosSeries.stream()
-                .map(s->new Serie(s))
-                .collect(Collectors.toList());
+                                .map(s -> new Serie(s))
+                                .collect(Collectors.toList());
                 series.stream()
-                .sorted(Comparator.comparing(Serie::getGenero))
-                .forEach(System.out::println);
+                                .sorted(Comparator.comparing(Serie::getGenero))
+                                .forEach(System.out::println);
         }
 }
