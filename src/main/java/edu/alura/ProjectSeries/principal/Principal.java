@@ -19,6 +19,7 @@ import edu.alura.ProjectSeries.models.DatosEpisode;
 import edu.alura.ProjectSeries.models.DatosSeries;
 import edu.alura.ProjectSeries.models.DatosTemporadas;
 import edu.alura.ProjectSeries.models.Episode;
+import edu.alura.ProjectSeries.models.Serie;
 import edu.alura.ProjectSeries.service.ConsumoAPI;
 import edu.alura.ProjectSeries.service.ConvierteDatos;
 
@@ -39,9 +40,12 @@ public class Principal {
         private final String API = "&apikey=53a8e07f";
         private final String URL = "https://www.omdbapi.com/?t=";
 
+
+        private List<DatosSeries> datosSeries = new ArrayList<>();
+
         public void menu() {
-                var opcion = -1;
-                while (opcion != 0) {
+                int opcion;
+                do{
                         var menu = """
                                         1 - Buscar series
                                         2 - Buscar episodios
@@ -60,14 +64,16 @@ public class Principal {
                                 case 2:
                                         buscarEpisodioPorSerie();
                                         break;
-
+                                case 3:
+                                        mostrarSeries();
+                                        break;
                                 case 0:
                                         System.out.println("Cerrando la aplicación...");
                                         break;
                                 default:
                                         System.out.println("Opción inválida");
                         }
-                }
+                }while (opcion != 0);
 
         }
 
@@ -75,7 +81,6 @@ public class Principal {
                 System.out.println("Escribe el nombre de la serie que deseas buscar");
                 var nombreSerie = scn.nextLine();
                 var json = consumoApi.obtenerDatos(URL + nombreSerie.replace(" ", "+") + API);
-                System.out.println(json);
                 DatosSeries datos = convierteDatos.obterDados(json, DatosSeries.class);
                 return datos;
         }
@@ -95,6 +100,17 @@ public class Principal {
 
         private void buscarSerieWeb() {
                 DatosSeries datos = getDatosSerie();
-                System.out.println(datos);
+                datosSeries.add(datos);
+                System.out.println(datos.titulo()+" adicionada con sucesso!");
+        }
+
+        private void mostrarSeries(){
+                List<Serie> series = new ArrayList<>();
+                series = datosSeries.stream()
+                .map(s->new Serie(s))
+                .collect(Collectors.toList());
+                series.stream()
+                .sorted(Comparator.comparing(Serie::getGenero))
+                .forEach(System.out::println);
         }
 }
