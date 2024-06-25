@@ -10,6 +10,7 @@ import java.util.Scanner;
 import java.util.stream.Collectors;
 
 import edu.alura.ProjectSeries.models.*;
+import edu.alura.ProjectSeries.repository.SerieRepository;
 import edu.alura.ProjectSeries.service.ConsumoAPI;
 import edu.alura.ProjectSeries.service.ConvierteDatos;
 
@@ -31,6 +32,11 @@ public class Principal {
         private final String URL = "https://www.omdbapi.com/?t=";
 
         private List<DatosSeries> datosSeries = new ArrayList<>();
+        private SerieRepository repository;
+
+        public Principal(SerieRepository serieRepository) {
+                this.repository = serieRepository;
+        }
 
         public void menu() {
                 int opcion;
@@ -89,15 +95,14 @@ public class Principal {
 
         private void buscarSerieWeb() {
                 DatosSeries datos = getDatosSerie();
-                datosSeries.add(datos);
+                Serie serie = new Serie(datos);
+                repository.save(serie);
+                //datosSeries.add(datos);
                 System.out.println(datos.titulo() + " adicionada con sucesso!");
         }
 
         private void mostrarSeries() {
-                List<Serie> series = new ArrayList<>();
-                series = datosSeries.stream()
-                                .map(s -> new Serie(s))
-                                .collect(Collectors.toList());
+                List<Serie> series = repository.findAll();
                 series.stream()
                                 .sorted(Comparator.comparing(Serie::getGenero))
                                 .forEach(System.out::println);
