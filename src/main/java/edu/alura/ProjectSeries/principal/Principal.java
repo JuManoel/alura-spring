@@ -31,7 +31,6 @@ public class Principal {
         private final String API = "&apikey=53a8e07f";
         private final String URL = "https://www.omdbapi.com/?t=";
 
-        private List<DatosSeries> datosSeries = new ArrayList<>();
         private SerieRepository repository;
 
         private List<Serie> series;
@@ -93,8 +92,10 @@ public class Principal {
                 System.out.println("Ingrese la evaluacion que buscas");
                 double evaluacion = this.scn.nextDouble();
                 this.scn.nextLine();
-                Optional<List<Serie>> serie = this.repository.findByTotalTemporadasGreaterThanEqualAndEvaluacionGreaterThanEqual(temporadas, evaluacion);
-                if(serie.isPresent()) 
+                Optional<List<Serie>> serie = this.repository
+                                .findByTotalTemporadasGreaterThanEqualAndEvaluacionGreaterThanEqual(temporadas,
+                                                evaluacion);
+                if (serie.isPresent())
                         serie.get().forEach(System.out::println);
                 else
                         System.out.println("Serie no encuentrada :()");

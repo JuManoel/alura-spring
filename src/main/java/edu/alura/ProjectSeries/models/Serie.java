@@ -3,8 +3,6 @@ package edu.alura.ProjectSeries.models;
 import java.util.List;
 import java.util.OptionalDouble;
 
-import org.hibernate.engine.internal.Cascade;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -16,7 +14,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
 
 @Entity
 @Table(name = "series")

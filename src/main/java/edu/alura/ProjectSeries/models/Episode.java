@@ -26,6 +26,7 @@ public class Episode {
 
     public Episode() {
     }
+
     public Episode(int temporada, DatosEpisode datosEpisode) {
         this.temporada = temporada;
         this.titulo = datosEpisode.titulo();

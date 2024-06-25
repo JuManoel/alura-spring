@@ -24,6 +24,5 @@ public class ProjectSeriesApplication implements CommandLineRunner {
 		principal.menu();
 
 	}
-	
 
 }
