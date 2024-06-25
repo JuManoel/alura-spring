@@ -3,13 +3,18 @@ package edu.alura.ProjectSeries.models;
 import java.util.List;
 import java.util.OptionalDouble;
 
+import org.hibernate.engine.internal.Cascade;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 
@@ -36,11 +41,11 @@ public class Serie {
 
     private String poster;
 
-    @Transient
+    @OneToMany(mappedBy = "serie", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Episode> episodes;
 
-    public Serie(){
-        
+    public Serie() {
+
     }
 
     public Serie(DatosSeries series) {
@@ -112,7 +117,8 @@ public class Serie {
     @Override
     public String toString() {
         return "titulo: " + titulo + "\ntotalTemporadas: " + totalTemporadas + "\nevaluacion: " + evaluacion
-                + "\ngenero: " + genero + "\npremios: " + premios + "\nsinopsis: " + sinopsis + "\nposter: " + poster;
+                + "\ngenero: " + genero + "\npremios: " + premios + "\nsinopsis: " + sinopsis + "\nposter: " + poster
+                + "\n";
     }
 
     public int getId() {
@@ -129,6 +135,7 @@ public class Serie {
 
     public void setEpisodes(List<Episode> episodes) {
         this.episodes = episodes;
+        this.episodes.forEach(e -> e.setSerie(this));
     }
 
 }
