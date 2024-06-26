@@ -47,6 +47,8 @@ public class Principal {
                                         2 - Buscar episodios        5. Top 5 Series
                                         3 - Mostrar series buscadas 6. Buscar serie por Genero
                                         7. Buscar por temporadas y  evaluacion
+                                        8. Buscar episodio por nombre
+                                        9. TOP 5 episodes por Serie
                                         0 - Salir
                                         """;
                         System.out.println(menu);
@@ -75,6 +77,12 @@ public class Principal {
                                 case 7:
                                         buscarPorTempeEEval();
                                         break;
+                                case 8:
+                                        buscarEpisodeNombre();
+                                        break;
+                                case 9:
+                                        buscarTop5Eps();
+                                        break;
                                 case 0:
                                         System.out.println("Cerrando la aplicación...");
                                         break;
@@ -85,6 +93,28 @@ public class Principal {
 
         }
 
+        private void buscarTop5Eps() {
+                System.out.println("Ingres el nombre de la Serie que buscas");
+                String nombre = this.scn.nextLine();
+                Optional<Serie> serie = this.repository.findByTituloContainsIgnoreCase(nombre);
+                if (serie.isPresent()) {
+                        List<Episode> episodes = this.repository.top5Episodes(serie.get());
+                        episodes.forEach(System.out::println);
+                } else
+                        System.out.println("No existe esa serie");
+        }
+
+        private void buscarEpisodeNombre() {
+                System.out.println("Ingrese el nombre del episodio");
+                String nombre = this.scn.nextLine();
+                Optional<List<Episode>> serie = this.repository.buscarEpPorNombre(nombre);
+                if (serie.isPresent()) {
+                        serie.get().stream()
+                                        .forEach(System.out::println);
+                } else
+                        System.out.println("Nombre no existe");
+        }
+
         private void buscarPorTempeEEval() {
                 System.out.println("Ingrese la cantidad de temporadas");
                 int temporadas = this.scn.nextInt();
@@ -93,7 +123,7 @@ public class Principal {
                 double evaluacion = this.scn.nextDouble();
                 this.scn.nextLine();
                 Optional<List<Serie>> serie = this.repository
-                                .findByTotalTemporadasGreaterThanEqualAndEvaluacionGreaterThanEqual(temporadas,
+                                .buscarSerieTempEval(temporadas,
                                                 evaluacion);
                 if (serie.isPresent())
                         serie.get().forEach(System.out::println);
