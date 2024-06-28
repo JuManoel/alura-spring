@@ -7,7 +7,9 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import edu.alura.ProjectSeries.dto.EpisodesDTO;
 import edu.alura.ProjectSeries.dto.SerieDTO;
+import edu.alura.ProjectSeries.models.Categorias;
 import edu.alura.ProjectSeries.models.Serie;
 import edu.alura.ProjectSeries.repository.SerieRepository;
 
@@ -44,8 +46,35 @@ public class SerieService {
             return new SerieDTO(s.getId(), s.getTitulo(), s.getTotalTemporadas(), s.getEvaluacion(), s.getGenero(),
                     s.getSinopsis(), s.getPoster(), s.getPremios());
 
-        } else {
-            return null;
         }
+        return null;
+
+    }
+
+    public List<EpisodesDTO> mostrarTodasLasTemporadas(int id) {
+        Optional<Serie> serie = serieRepository.findById(id);
+        if (serie.isPresent()) {
+            List<EpisodesDTO> eps = serie.get().getEpisodes().stream()
+                    .map(e -> new EpisodesDTO(e.getTemporada(), e.getTitulo(), e.getNumEp()))
+                    .collect(Collectors.toList());
+            return eps;
+        }
+        return null;
+    }
+
+    public List<EpisodesDTO> mostrarEpsTemporada(int id, int numTemp) {
+        Optional<Serie> serie = serieRepository.findById(id);
+        if (serie.isPresent()) {
+            List<EpisodesDTO> eps = serie.get().getEpisodes().stream()
+                    .filter(e -> e.getTemporada()==numTemp)
+                    .map(e -> new EpisodesDTO(e.getTemporada(), e.getTitulo(), e.getNumEp()))
+                    .collect(Collectors.toList());
+            return eps;
+        }
+        return null;
+    }
+
+    public List<SerieDTO> mostrarSeriesPorCategoria(String categoria) {
+        return converterSerie(serieRepository.findByGenero(Categorias.fromString(categoria)));
     }
 }
